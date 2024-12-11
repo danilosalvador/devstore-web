@@ -4,7 +4,13 @@ import { api } from "@/data/api";
 import type { Product } from "@/data/types/product";
 
 export async function getFeaturedProducts(): Promise<Product[]> {
-    const response = await api('/products/featured')
+    const response = await api('/products/featured', {
+        //cache: 'force-cache' // cache padrão
+        //cache: 'no-store' // sem cache
+        next: {
+            revalidate: 60 * 60, // cache é invalido depois de 1h
+        }
+    })
 
     const products = await response.json()
 
