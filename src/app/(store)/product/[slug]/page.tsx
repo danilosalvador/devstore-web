@@ -1,11 +1,35 @@
 import Image from "next/image";
+import { api } from "@/data/api";
+import type { Product } from "@/data/types/product";
 
-export default function ProductPage() {
+interface ProductProps {
+    params: {
+        slug: string
+    }
+}
+
+export async function getProduct(slug: string): Promise<Product> {
+    const response = await api(`/products/${slug}`, {
+        //cache: 'force-cache' // cache padrão
+        //cache: 'no-store' // sem cache
+        next: {
+            revalidate: 60 * 60, // cache é invalido depois de 1h
+        }
+    })
+
+    const product = await response.json()
+
+    return product
+}
+
+export default async function ProductPage({ params }: ProductProps) {
+    const product = await getProduct(params.slug)
+
     return (
         <div className="relative grid max-h-[860px] grid-cols-3">
             <div className="col-span-2 overflow-hidden">
                 <Image
-                    src="/moletom-never-stop-learning.png"
+                    src={product.image}
                     alt=""
                     width={1000}
                     height={1000}
@@ -15,18 +39,24 @@ export default function ProductPage() {
 
             <div className="flex flex-col justify-center px-12">
                 <h1 className="text-3xl font-bold leading-tight">
-                    Lorem ipsum
+                    {product.title}
                 </h1>
                 <p className="mt-2 text-zinc-400 leading-relaxed">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit
+                    {product.description}
                 </p>
 
                 <div className="mt-8 flex items-center gap-3">
                     <span className="inline-block px-5 py-2.5 rounded-full bg-violet-500 font-semibold">
-                        R$ 129,00
+                        {product.price.toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL'
+                        })}
                     </span>
                     <span className="text-sm text-zinc-400">
-                        Em 12x s/ juros de R$ 10,75
+                        Em 12x s/ juros de {(product.price / 12).toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL'
+                        })}
                     </span>
                 </div>
 
