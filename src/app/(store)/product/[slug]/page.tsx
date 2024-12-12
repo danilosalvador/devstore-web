@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { api } from "@/data/api";
 import type { Product } from "@/data/types/product";
@@ -22,8 +23,18 @@ export async function getProduct(slug: string): Promise<Product> {
     return product
 }
 
+export async function generateMetadata({ params }: ProductProps): Promise<Metadata> {
+    const p = await params;
+    const product = await getProduct(p.slug)
+
+    return {
+        title: product.title,
+    }
+}
+
 export default async function ProductPage({ params }: ProductProps) {
-    const product = await getProduct(params.slug)
+    const p = await params;
+    const product = await getProduct(p.slug)
 
     return (
         <div className="relative grid max-h-[860px] grid-cols-3">
