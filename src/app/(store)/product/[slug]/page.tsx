@@ -32,6 +32,24 @@ export async function generateMetadata({ params }: ProductProps): Promise<Metada
     }
 }
 
+/*
+    Geração estática no Next.js
+    Permite criar uma versão em cache das páginas da aplicação antes de serem publicadas.
+    A função [generateStaticParams] deve retornar um array de objetos, onde cada objeto representa um parâmetro que desejamos gerar de forma estática.
+    Recomenda-se utilizar a geração estática apenas para páginas que são realmente importantes e que precisam ser carregadas de forma rápida.
+
+    Comando de build: npm run build
+    Comando para iniciar: npm run start
+*/
+export async function generateStaticParams() {
+    const response = await api('/products/featured')
+    const products: Product[] = await response.json()
+
+    return products.map((product) => {
+        return { slug: product.slug }
+    })
+}
+
 export default async function ProductPage({ params }: ProductProps) {
     const p = await params;
     const product = await getProduct(p.slug)
