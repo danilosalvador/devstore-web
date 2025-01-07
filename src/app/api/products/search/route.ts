@@ -3,7 +3,7 @@ import { z } from 'zod'
 import data from '../data.json'
 
 export async function GET(request: NextRequest) {
-    // await new Promise(resolve => setTimeout(resolve, 3000)) //simular um delay na chamada
+    await new Promise(resolve => setTimeout(resolve, 3000)) //simular um delay na chamada
 
     const { searchParams } = request.nextUrl
 
