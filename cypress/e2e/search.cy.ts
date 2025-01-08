@@ -6,7 +6,7 @@ describe('Pesquisar produtos', () => {
     })
 
     it('Deve ser possível procurar por produtos', () => {
-        cy.get('input[name=q]').type('moletom').parent('form').submit()
+        cy.searchByQuery('moletom') // comando customizado em ../support/commands.ts
 
         cy.location('pathname').should('include', '/search')
         cy.location('search').should('include', 'q=moletom')

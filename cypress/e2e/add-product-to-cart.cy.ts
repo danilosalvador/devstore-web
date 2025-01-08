@@ -27,7 +27,7 @@ describe('Adicionar produto ao carrinho', () => {
     })
 
     it('Deve ser possível procurar um produto e adicioná-lo ao carrinho', () => {
-        cy.get('input[name=q]').type('moletom').parent('form').submit()
+        cy.searchByQuery('moletom') // comando customizado em ../support/commands.ts
 
         cy.get('a[href^="/product"]').first().click()
 
