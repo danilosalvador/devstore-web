@@ -1,7 +1,11 @@
 describe('Adicionar produto ao carrinho', () => {
-    it('Deve ser possível navegar para a página de produto e adicionar o produto ao carrinho', () => {
-        cy.visit('http://localhost:3000')
+    //antes de cada teste
+    beforeEach(() => {
+        //URL base configurada em cypress.config.ts
+        cy.visit('/')
+    })
 
+    it('Deve ser possível navegar para a página de produto e adicionar o produto ao carrinho', () => {
         cy.get('a[href^="/product"]').first().click()
 
         cy.location('pathname').should('include', '/product')
@@ -12,8 +16,6 @@ describe('Adicionar produto ao carrinho', () => {
     })
 
     it('Não deve ser possível contar produtos duplicados no carrinho', () => {
-        cy.visit('http://localhost:3000')
-
         cy.get('a[href^="/product"]').first().click()
 
         cy.location('pathname').should('include', '/product')
@@ -25,8 +27,6 @@ describe('Adicionar produto ao carrinho', () => {
     })
 
     it('Deve ser possível procurar um produto e adicioná-lo ao carrinho', () => {
-        cy.visit('http://localhost:3000')
-
         cy.get('input[name=q]').type('moletom').parent('form').submit()
 
         cy.get('a[href^="/product"]').first().click()
